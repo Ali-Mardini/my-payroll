@@ -1,5 +1,5 @@
+import { Link } from 'react-router-dom';
 import AuthLeftSide from "../../components/auth-left-side/auth-left-side";
-import "./login.css";
 
 const Login = () => {
   return (
@@ -40,9 +40,9 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-400">
               Need an account?
-              <a href="#" className="text-blue-600 hover:text-blue-700">
+              <Link to="/register" className="text-blue-600 hover:text-blue-700">
                 Signup
-              </a>
+              </Link>
             </p>
           </div>
         </form>

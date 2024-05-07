@@ -1,5 +1,6 @@
 import logo from "../../assets/logo.png";
 import leftImg from "../../assets/left-img.png";
+import './auth-left-side.css';
 const AuthLeftSide = () =>{
 	return (
 		<div className="flex flex-col w-full">
