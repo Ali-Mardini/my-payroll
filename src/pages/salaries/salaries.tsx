@@ -8,12 +8,39 @@ const Salaries = () => {
     setActiveTab(tab);
   };
 
+  interface LogRecord {
+    id: number;
+    date: string;
+    message: string;
+    level: string;
+  }
+
+  const sampleLogs: LogRecord[] = [
+    {
+      id: 1,
+      date: "2024-05-01",
+      message: "Error occurred during processing",
+      level: "Error",
+    },
+    {
+      id: 2,
+      date: "2024-05-02",
+      message: "Successfully processed data",
+      level: "Info",
+    },
+    // Add more sample logs as needed
+  ];
+
   interface Employee {
     id: number;
     name: string;
     basicSalary: number;
+    allowances: number;
+    additions: number;
+    deductions: number;
     month: string;
     year: number;
+    total: number;
     isEndOfService: boolean;
   }
 
@@ -22,16 +49,24 @@ const Salaries = () => {
       id: 1,
       name: "John Doe",
       basicSalary: 5000,
+      allowances: 5000,
+      additions: 0,
+      deductions: 0,
       month: "January",
       year: 2024,
+      total: 0,
       isEndOfService: false,
     },
     {
       id: 2,
       name: "Jane Doe",
       basicSalary: 6000,
+      allowances: 5000,
+      additions: 0,
+      deductions: 0,
       month: "January",
       year: 2024,
+      total: 0,
       isEndOfService: true,
     },
     // Add more sample data as needed
@@ -47,6 +82,19 @@ const Salaries = () => {
           : employee
       )
     );
+  };
+
+  const getLevelColor = (level: string): string => {
+    switch (level.toLowerCase()) {
+      case "error":
+        return "text-red-500";
+      case "warning":
+        return "text-yellow-500";
+      case "info":
+        return "text-blue-500";
+      default:
+        return "text-gray-500";
+    }
   };
 
   return (
@@ -103,9 +151,21 @@ const Salaries = () => {
                         Basic Salary
                       </th>
                       <th className="border border-gray-200 px-4 py-2">
+                        Allowances
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Additions
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Deductions
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
                         Month
                       </th>
                       <th className="border border-gray-200 px-4 py-2">Year</th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Total
+                      </th>
                       <th className="border border-gray-200 px-4 py-2">
                         End of Service
                       </th>
@@ -121,10 +181,22 @@ const Salaries = () => {
                           {employee.basicSalary}
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
+                          {employee.allowances}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.additions}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.deductions}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
                           {employee.month}
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
                           {employee.year}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.total}
                         </td>
                         <td className="border border-gray-200 px-4 py-2 flex items-center">
                           <input
@@ -138,7 +210,6 @@ const Salaries = () => {
                             }
                             className="mr-2"
                           />
-                          Mark as End of Service
                         </td>
                       </tr>
                     ))}
@@ -148,10 +219,42 @@ const Salaries = () => {
             </div>
           )}
           {activeTab === "logs" && (
-            <div>
-              {/* Render Logs Tab Content */}
-              <h2 className="text-lg font-semibold mb-2">Logs Tab Content</h2>
-              <p>This is the content for the Logs tab.</p>
+            <div className="container mx-auto mt-8">
+              <h1 className="text-2xl font-bold mb-4">Logs Records</h1>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-200">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="border border-gray-200 px-4 py-2">Date</th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Message
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Level
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sampleLogs.map((log) => (
+                      <tr key={log.id} className="hover:bg-gray-100">
+                        <td className="border border-gray-200 px-4 py-2">
+                          {log.date}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {log.message}
+                        </td>
+                        <td
+                          className={`border border-gray-200 px-4 py-2 ${getLevelColor(
+                            log.level
+                          )}`}
+                        >
+                          {log.level}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
