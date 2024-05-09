@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+# Payroll Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This React application empowers you to streamline employee management, ensure accurate salary processing, and provide effortless access to salary history.
 
-Currently, two official plugins are available:
+## Authentication
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Secure login and registration are facilitated by Auth0.
 
-## Expanding the ESLint configuration
+## Backend and Database
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- JSON Server serves as a mock API, providing simulated data interaction.
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+### Prerequisites
+
+- Node.js and npm (or yarn) installed on your system.
+
+### Project Setup
+
+1. Clone or download the project repository.
+2. Navigate to the project directory in your terminal.
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+## Running the App Separate Terminals: 
+Open two separate terminal windows.
+
+Terminal 1 (Database):
+
+```bash
+npm run db
+```
+Use code with caution.
+This command starts the mock API using JSON Server.
+
+Terminal 2 (Frontend):
+
+```bash
+npm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+This command starts the development server for the React app.
+
+## Important Note:
+
+The application runs on port 5173. Avoid modifying this port configuration. otherwise Auth0 will not work.
