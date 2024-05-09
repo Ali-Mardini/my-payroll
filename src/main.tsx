@@ -5,6 +5,8 @@ import Login from './pages/login/login';
 import Register from './pages/register/register';
 import './index.css';
 import Dashboard from './pages/dashboard/dashboard';
+import Employees from './pages/employees/employees';
+import Salaries from './pages/salaries/salaries';
 
 const router = createBrowserRouter([
 	{
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
 	{
 		path:"/dashboard",
 		element: <Dashboard />
+	},
+	{
+		path:"/employees",
+		element: <Employees />
+	},
+	{
+		path:"/salaries",
+		element: <Salaries />
 	}
 ]);
 
