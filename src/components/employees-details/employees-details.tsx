@@ -1,19 +1,13 @@
 import { useState } from "react";
+import { Employee } from '../../types/employee';
 
-interface Employee {
-  id: number;
-  staffId: string;
-  name: string;
-  joiningDate: string;
-  basicSalary: string;
-  salaryAllowances: string;
+interface EmployeeDetailsProps{
+	employee: Employee;
+	onSave: (editedEmployee: Employee) => void;
+	onCancel: () => void;
 }
 
-const EmployeeDetails: React.FC<{
-  employee: Employee;
-  onSave: (editedEmployee: Employee) => void;
-  onCancel: () => void;
-}> = ({ employee, onSave, onCancel }) => {
+const EmployeeDetails = ({ employee, onSave, onCancel }: EmployeeDetailsProps) => {
   const [editedEmployee, setEditedEmployee] = useState(employee);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,8 +65,8 @@ const EmployeeDetails: React.FC<{
         Salary Allowances:
         <input
           type="text"
-          name="salaryAllowances"
-          value={editedEmployee.salaryAllowances}
+          name="allowances"
+          value={editedEmployee.allowances}
           onChange={handleChange}
           className="form-input mt-1 block w-full"
         />

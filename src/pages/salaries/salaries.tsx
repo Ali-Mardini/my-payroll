@@ -1,90 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../layouts/layout";
 import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
-import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { Employee } from "../../types/employee";
+import axios from "axios";
+import { Salary } from "../../types/salary";
+import { LogRecord } from "../../types/logRecord";
+import { v4 as uuidv4 } from "uuid";
 
 const Salaries = () => {
   const [activeTab, setActiveTab] = useState("salaries");
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [logs, setLogs] = useState<LogRecord[]>([]);
+  const [additionsMap, setAdditionsMap] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [deductionsMap, setDeductionsMap] = useState<{ [key: string]: string }>(
+    {}
+  );
+
+  const handleAdditionsChange = (event, employeeId: string) => {
+    setAdditionsMap((prevMap) => ({
+      ...prevMap,
+      [employeeId]: event.target.value,
+    }));
+  };
+
+  const handleDeductionsChange = (event, employeeId: string) => {
+    setDeductionsMap((prevMap) => ({
+      ...prevMap,
+      [employeeId]: event.target.value,
+    }));
+  };
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
-  interface LogRecord {
-    id: number;
-    date: string;
-    message: string;
-    level: string;
-  }
+  useEffect(() => {
+    const getStaffs = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/staffs");
+        setEmployees(response.data);
+      } catch (error) {
+        console.error("Error fetching staffs:", error);
+      }
+    };
 
-  const sampleLogs: LogRecord[] = [
-    {
-      id: 1,
-      date: "2024-05-01",
-      message: "Error occurred during processing",
-      level: "Error",
-    },
-    {
-      id: 2,
-      date: "2024-05-02",
-      message: "Successfully processed data",
-      level: "Info",
-    },
-    // Add more sample logs as needed
-  ];
+    const getLogs = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/logs");
+        setLogs(response.data);
+      } catch (error) {
+        console.error("Error fetching staffs:", error);
+      }
+    };
 
-  interface Employee {
-    id: number;
-    name: string;
-    basicSalary: number;
-    allowances: number;
-    additions: number;
-    deductions: number;
-    month: string;
-    year: number;
-    total: number;
-    isEndOfService: boolean;
-  }
-
-  const sampleData: Employee[] = [
-    {
-      id: 1,
-      name: "John Doe",
-      basicSalary: 5000,
-      allowances: 5000,
-      additions: 0,
-      deductions: 0,
-      month: "January",
-      year: 2024,
-      total: 0,
-      isEndOfService: false,
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      basicSalary: 6000,
-      allowances: 5000,
-      additions: 0,
-      deductions: 0,
-      month: "January",
-      year: 2024,
-      total: 0,
-      isEndOfService: true,
-    },
-    // Add more sample data as needed
-  ];
-
-  const [employees, setEmployees] = useState<Employee[]>(sampleData);
-
-  const handleEndOfServiceChange = (employeeId: number, isChecked: boolean) => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.map((employee) =>
-        employee.id === employeeId
-          ? { ...employee, isEndOfService: isChecked }
-          : employee
-      )
-    );
-  };
+    getStaffs();
+    getLogs();
+  }, []);
 
   const getLevelColor = (level: string): string => {
     switch (level.toLowerCase()) {
@@ -99,21 +73,115 @@ const Salaries = () => {
     }
   };
 
+  const calculateTotalSalary = (employee: Employee) => {
+    const basicSalary = parseFloat(employee.basicSalary.toString());
+    const allowances = parseFloat(employee.allowances.toString());
+    let additionsValue = 0;
+    let deductionsValue = 0;
+    try {
+      additionsValue = parseFloat(additionsMap[employee.id]?.toString() || "0");
+      deductionsValue = parseFloat(
+        deductionsMap[employee.id]?.toString() || "0"
+      );
+    } catch (error) {
+      console.error("Error parsing addition or deduction value:", error);
+    }
+    return basicSalary + allowances + additionsValue - deductionsValue;
+  };
+
+  const months = [
+    "",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const currentYear = new Date().getFullYear();
+  const yearOptions = [currentYear, currentYear - 1];
+
+  const submitSalaries = async (processedSalarie: Salary[]) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/salaries",
+        processedSalarie
+      );
+      if (response.status == 201) {
+        await logTransactions(processedSalarie.length, true);
+        window.location.reload();
+      }
+    } catch (error) {
+      await logTransactions(processedSalarie.length, false);
+      console.error("Error fetching staffs:", error);
+    }
+  };
+
+  const logTransactions = async (
+    transactionCount: number,
+    success: boolean
+  ) => {
+    try {
+      const log: LogRecord = {
+        id: uuidv4(),
+        date: `${new Date().toDateString()}, ${new Date().toLocaleTimeString()}`,
+        message: success
+          ? `${transactionCount} has been processed successfully!`
+          : `${transactionCount} failed to process!`,
+        level: success ? "info" : "error",
+      };
+      const response = await axios.post("http://localhost:3000/logs", log);
+      if (response.status == 201) {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Error fetching staffs:", error);
+    }
+  };
+
+  const handleProcessSalaries = async () => {
+    const processedSalaries: Salary[] = [];
+
+    employees.forEach((employee) => {
+      const selectedMonth = document.getElementById(
+        `month-${employee.id}`
+      )?.value;
+
+      // Only process records with a selected month
+      if (selectedMonth) {
+        processedSalaries.push({
+          id: employee.id,
+          name: employee.name,
+          basicSalary: parseFloat(employee.basicSalary.toString()),
+          allowances: parseFloat(employee.allowances.toString()),
+          additions: parseFloat(additionsMap[employee.id]?.toString() || "0"),
+          deductions: parseFloat(deductionsMap[employee.id]?.toString() || "0"),
+          month: selectedMonth,
+          year:
+            document.getElementById(`year-${employee.id}`)?.value ||
+            currentYear.toString(), // Get year value by employee ID or use currentYear
+          total: calculateTotalSalary(employee),
+          isEndOfService:
+            document.getElementById(`end-of-service-${employee.id}`)?.checked ||
+            false,
+        });
+      }
+    });
+    await submitSalaries(processedSalaries);
+  };
+
   return (
     <Layout>
       <div className="bg-gradient-to-r from-blue-500 to-purple-500 py-10 px-4 text-white">
         <h1 className="text-4xl font-bold mb-2">Salaries</h1>
         <p className="text-lg mb-4">Manage your team Salaries efficiently</p>
-        <div className="flex items-center">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500 flex-grow"
-          />
-          <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded-r-md">
-            Search
-          </button>
-        </div>
       </div>
       <div className="container mx-auto mt-8">
         <div className="flex mb-4">
@@ -144,10 +212,13 @@ const Salaries = () => {
               <div className="container mx-auto mt-8">
                 <div className="flex justify-between mb-3">
                   <h1 className="text-2xl font-bold mb-4">Salary Table</h1>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-full flex items-center">
-                      <PaperAirplaneIcon className="h-4 w-4 mr-3" />
-                      Process salaries
-                    </button>
+                  <button
+                    onClick={handleProcessSalaries}
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-full flex items-center"
+                  >
+                    <PaperAirplaneIcon className="h-4 w-4 mr-3" />
+                    Process salaries
+                  </button>
                 </div>
                 <table className="w-full border-collapse border border-gray-200">
                   <thead className="bg-gray-100">
@@ -192,30 +263,51 @@ const Salaries = () => {
                           {employee.allowances}
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          <input type="number" value={employee.additions} />
+                          <input
+                            type="number"
+                            value={additionsMap[employee.id] || 0}
+                            onChange={(event) =>
+                              handleAdditionsChange(event, employee.id)
+                            }
+                          />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          <input type="number" value={employee.deductions} />
+                          <input
+                            type="number"
+                            value={deductionsMap[employee.id] || 0}
+                            onChange={(event) =>
+                              handleDeductionsChange(event, employee.id)
+                            }
+                          />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          {employee.month}
+                          <select id={`month-${employee.id}`}>
+                            {months.map((month) => (
+                              <option key={month} value={month}>
+                                {month}
+                              </option>
+                            ))}
+                          </select>
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          {employee.year}
+                          <select
+                            id={`year-${employee.id}`}
+                            value={currentYear}
+                          >
+                            {yearOptions.map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
+                          </select>
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          {employee.total}
+                          {calculateTotalSalary(employee)}
                         </td>
                         <td className="border border-gray-200 px-4 py-2 flex items-center">
                           <input
+                            id={`end-of-service-${employee.id}`}
                             type="checkbox"
-                            checked={employee.isEndOfService}
-                            onChange={(e) =>
-                              handleEndOfServiceChange(
-                                employee.id,
-                                e.target.checked
-                              )
-                            }
                             className="mr-2"
                           />
                         </td>
@@ -243,7 +335,7 @@ const Salaries = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {sampleLogs.map((log) => (
+                    {logs.map((log) => (
                       <tr key={log.id} className="hover:bg-gray-100">
                         <td className="border border-gray-200 px-4 py-2">
                           {log.date}
@@ -271,9 +363,8 @@ const Salaries = () => {
   );
 };
 
-
 const SalariesWithAuthentication = withAuthenticationRequired(Salaries, {
-    onRedirecting: () => <div>loading...</div>,
+  onRedirecting: () => <div>loading...</div>,
 });
 
 export default SalariesWithAuthentication;

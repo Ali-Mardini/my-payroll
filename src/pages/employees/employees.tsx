@@ -1,27 +1,35 @@
-import { withAuthenticationRequired } from '@auth0/auth0-react';
-import EmployeesTable from '../../components/employees-table/employees-table';
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import EmployeesTable from "../../components/employees-table/employees-table";
 import Layout from "../../layouts/layout";
+import { useEffect, useState } from "react";
+import { Employee } from "../../types/employee";
+import axios from "axios";
 
 const Employees = () => {
-  const data = [
-    {
-      id: 1,
-      staffId: "S001",
-      name: "John Doe",
-      joiningDate: "2022-01-01",
-      basicSalary: "$5000",
-      salaryAllowances: "$1000",
-    },
-    {
-      id: 2,
-      staffId: "S002",
-      name: "Jane Doe",
-      joiningDate: "2022-02-15",
-      basicSalary: "$5500",
-      salaryAllowances: "$1200",
-    },
-    // Add more data items as needed
-  ];
+  const [data, setData] = useState<Employee[]>([]);
+
+  useEffect(() => {
+    const getStaffs = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/staffs");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching staffs:", error);
+      }
+    };
+
+    getStaffs();
+  }, []);
+
+
+  const search = async (value: string) => {
+	try {
+        const response = await axios.get(`http://localhost:3000/staffs?name=${value}`);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching staffs:", error);
+      }
+  }
 
   return (
     <Layout>
@@ -31,23 +39,20 @@ const Employees = () => {
         <div className="flex items-center">
           <input
             type="text"
-            placeholder="Search..."
-            className="py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500 flex-grow"
+			onKeyUp={(e) => search(e.target.value)}
+            placeholder="Staff name..."
+            className="py-2 px-4 text-black border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500 flex-grow"
           />
-          <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-6 rounded-r-md">
-            Search
-          </button>
         </div>
       </div>
 
-     <EmployeesTable data={data} />
+      <EmployeesTable data={data} />
     </Layout>
   );
 };
 
-
 const EmployeesWithAuthentication = withAuthenticationRequired(Employees, {
-    onRedirecting: () => <div>loading...</div>,
+  onRedirecting: () => <div>loading...</div>,
 });
 
 export default EmployeesWithAuthentication;

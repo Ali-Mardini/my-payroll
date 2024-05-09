@@ -1,0 +1,211 @@
+{
+  "staffs": [
+    {
+      "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+      "staffId": "S001",
+      "name": "John Doe",
+      "joiningDate": "2022-01-02",
+      "basicSalary": "1500",
+      "allowances": 2000,
+      "currancy": "$",
+      "salaryAllowances": "200"
+    },
+    {
+      "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+      "staffId": "S002",
+      "name": "Sam Joe",
+      "joiningDate": "2024-04-11",
+      "basicSalary": "4500",
+      "allowances": "1200",
+      "currancy": "$",
+      "salaryAllowances": "03"
+    },
+    {
+      "id": "b82fa698-8ec3-4fed-af99-798cdce165f4",
+      "staffId": "S003",
+      "name": "Adam Jane",
+      "joiningDate": "2024-05-01",
+      "basicSalary": "3400",
+      "allowances": "500",
+      "currancy": "$",
+      "salaryAllowances": "4830"
+    },
+    {
+      "id": "e352a91d-1ff1-471b-a960-4888e5a654d9",
+      "staffId": "S004",
+      "name": "Mariia Doe",
+      "joiningDate": "2024-02-01",
+      "basicSalary": "6500",
+      "allowances": "2400",
+      "currancy": "$"
+    }
+  ],
+  "salaries": [
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 0,
+        "deductions": 0,
+        "month": "February",
+        "year": "2024",
+        "total": 3500,
+        "isEndOfService": false
+      },
+      "1": {
+        "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+        "name": "Sam Joe",
+        "basicSalary": 4500,
+        "allowances": 1200,
+        "additions": 0,
+        "deductions": 0,
+        "month": "February",
+        "year": "2024",
+        "total": 5700,
+        "isEndOfService": false
+      }
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 1000,
+        "deductions": 0,
+        "month": "January",
+        "year": "2024",
+        "total": 4500,
+        "isEndOfService": false
+      },
+      "1": {
+        "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+        "name": "Sam Joe",
+        "basicSalary": 4500,
+        "allowances": 1200,
+        "additions": 0,
+        "deductions": 0,
+        "month": "January",
+        "year": "2024",
+        "total": 5700,
+        "isEndOfService": false
+      },
+      "id": "c458"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 0,
+        "deductions": 0,
+        "month": "March",
+        "year": "2024",
+        "total": 3500,
+        "isEndOfService": false
+      },
+      "1": {
+        "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+        "name": "Sam Joe",
+        "basicSalary": 4500,
+        "allowances": 1200,
+        "additions": 0,
+        "deductions": 0,
+        "month": "March",
+        "year": "2024",
+        "total": 5700,
+        "isEndOfService": false
+      },
+      "id": "53eb"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 100,
+        "deductions": 1000,
+        "month": "March",
+        "year": "2024",
+        "total": 2600,
+        "isEndOfService": false
+      },
+      "1": {
+        "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+        "name": "Sam Joe",
+        "basicSalary": 4500,
+        "allowances": 1200,
+        "additions": 0,
+        "deductions": 0,
+        "month": "March",
+        "year": "2024",
+        "total": 5700,
+        "isEndOfService": true
+      },
+      "id": "231a"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 0,
+        "deductions": 0,
+        "month": "March",
+        "year": "2024",
+        "total": 3500,
+        "isEndOfService": false
+      },
+      "1": {
+        "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+        "name": "Sam Joe",
+        "basicSalary": 4500,
+        "allowances": 1200,
+        "additions": 0,
+        "deductions": 0,
+        "month": "April",
+        "year": "2024",
+        "total": 5700,
+        "isEndOfService": false
+      },
+      "2": {
+        "id": "b82fa698-8ec3-4fed-af99-798cdce165f4",
+        "name": "Adam Jane",
+        "basicSalary": 3400,
+        "allowances": 500,
+        "additions": 2000,
+        "deductions": 0,
+        "month": "April",
+        "year": "2024",
+        "total": 5900,
+        "isEndOfService": false
+      },
+      "id": "74a9"
+    }
+  ],
+  "logs": [
+    {
+      "id": "961fc33c-b0f3-4e2e-915c-3fb99a15dabc",
+      "date": "Fri May 10 2024, 12:27:16 AM",
+      "message": "2 has been processed successfully!",
+      "level": "info"
+    },
+    {
+      "id": "5862c1be-d63c-43bb-929f-c983bfae81d0",
+      "date": "Fri May 10 2024, 12:28:59 AM",
+      "message": "2 has been processed successfully!",
+      "level": "info"
+    },
+    {
+      "id": "c6bec410-7674-480a-b72f-51495fb1b781",
+      "date": "Fri May 10 2024, 12:29:25 AM",
+      "message": "3 has been processed successfully!",
+      "level": "info"
+    }
+  ]
+}

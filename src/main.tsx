@@ -2,23 +2,23 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
-import DashboardWithAuthentication from "./pages/dashboard/dashboard";
 import EmployeesWithAuthentication from "./pages/employees/employees";
 import SalariesWithAuthentication from "./pages/salaries/salaries";
 import { Auth0Provider } from "@auth0/auth0-react";
+import NewEmployeeWithAuthentication from './pages/employees/new-employees';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <DashboardWithAuthentication />,
-  },
-  {
-    path: "/employees",
     element: <EmployeesWithAuthentication />,
   },
   {
     path: "/salaries",
     element: <SalariesWithAuthentication />,
+  },
+  {
+    path: "/new-staff",
+    element: <NewEmployeeWithAuthentication />,
   },
 ]);
 
