@@ -6,8 +6,10 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/16/solid";
 import Layout from "../../layouts/layout";
+import Chart from "../../components/chart/chart";
 
 const Dashboard = () => {
+
   return (
     <Layout>
       <div className="flex flex-col">
@@ -22,8 +24,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="flex mt-5 mx-5">
-            <div className="bg-blue-500 text-white shadow-lg rounded-lg p-4 mr-2">
+        <div className="flex">
+          <Chart />
+
+          {/* <div className="flex flex-col mt-5 mx-5 justify-around">
+            <div className="bg-blue-500 text-white shadow-lg rounded-lg p-4">
               <div className="flex items-center">
                 <div className="mr-2">
                   <CalendarIcon className="w-7 h-7 p-2 rounded-full bg-[#5392F8]" />
@@ -43,7 +48,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="bg-white text-black shadow-lg rounded-lg p-4 mr-2">
+            <div className="bg-white text-black shadow-lg rounded-lg p-4">
               <div className="flex items-center">
                 <div className="mr-2">
                   <CalendarIcon className="w-7 h-7 p-2 rounded-full bg-[#EAF2FF]" />
@@ -62,6 +67,7 @@ const Dashboard = () => {
                 <CalendarDaysIcon className="h-10 w-10 ml-auto" />
               </div>
             </div>
+        </div> */}
         </div>
       </div>
     </Layout>
