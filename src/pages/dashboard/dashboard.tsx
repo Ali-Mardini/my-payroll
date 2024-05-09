@@ -1,12 +1,10 @@
 import {
-  CalendarDaysIcon,
-  CalendarIcon,
-  ChartBarSquareIcon,
   PlusCircleIcon,
   UserCircleIcon,
 } from "@heroicons/react/16/solid";
 import Layout from "../../layouts/layout";
 import Chart from "../../components/chart/chart";
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Dashboard = () => {
 
@@ -74,4 +72,8 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const DashboardWithAuthentication = withAuthenticationRequired(Dashboard, {
+    onRedirecting: () => <div>loading...</div>,
+});
+
+export default DashboardWithAuthentication;

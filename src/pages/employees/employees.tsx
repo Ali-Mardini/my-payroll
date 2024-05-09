@@ -1,3 +1,4 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 import EmployeesTable from '../../components/employees-table/employees-table';
 import Layout from "../../layouts/layout";
 
@@ -44,4 +45,9 @@ const Employees = () => {
   );
 };
 
-export default Employees;
+
+const EmployeesWithAuthentication = withAuthenticationRequired(Employees, {
+    onRedirecting: () => <div>loading...</div>,
+});
+
+export default EmployeesWithAuthentication;

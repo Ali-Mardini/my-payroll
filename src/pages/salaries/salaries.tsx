@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Layout from "../../layouts/layout";
 import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Salaries = () => {
   const [activeTab, setActiveTab] = useState("salaries");
@@ -270,4 +271,9 @@ const Salaries = () => {
   );
 };
 
-export default Salaries;
+
+const SalariesWithAuthentication = withAuthenticationRequired(Salaries, {
+    onRedirecting: () => <div>loading...</div>,
+});
+
+export default SalariesWithAuthentication;

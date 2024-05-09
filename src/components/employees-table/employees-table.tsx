@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import EmployeeDetails from '../employees-details/employees-details';
-import { EyeIcon, PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
+import { PencilIcon, TrashIcon } from '@heroicons/react/16/solid';
 
 interface Employee {
   id: number;
