@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Layout from "../../layouts/layout";
+import { PaperAirplaneIcon } from "@heroicons/react/16/solid";
 
 const Salaries = () => {
   const [activeTab, setActiveTab] = useState("salaries");
@@ -140,7 +141,13 @@ const Salaries = () => {
           {activeTab === "salaries" && (
             <div>
               <div className="container mx-auto mt-8">
-                <h1 className="text-2xl font-bold mb-4">Salary Table</h1>
+                <div className="flex justify-between mb-3">
+                  <h1 className="text-2xl font-bold mb-4">Salary Table</h1>
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-full flex items-center">
+                      <PaperAirplaneIcon className="h-4 w-4 mr-3" />
+                      Process salaries
+                    </button>
+                </div>
                 <table className="w-full border-collapse border border-gray-200">
                   <thead className="bg-gray-100">
                     <tr>
@@ -184,10 +191,10 @@ const Salaries = () => {
                           {employee.allowances}
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          {employee.additions}
+                          <input type="number" value={employee.additions} />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          {employee.deductions}
+                          <input type="number" value={employee.deductions} />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
                           {employee.month}
