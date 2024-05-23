@@ -6,6 +6,7 @@ import EmployeesWithAuthentication from "./pages/employees/employees";
 import SalariesWithAuthentication from "./pages/salaries/salaries";
 import { Auth0Provider } from "@auth0/auth0-react";
 import NewEmployeeWithAuthentication from './pages/employees/new-employees';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+	<ToastContainer />
     <Auth0Provider
       domain="payroll-app.us.auth0.com"
       clientId="j2ZtO8upYPg8hgdduBSnbagNMbwuWROi"

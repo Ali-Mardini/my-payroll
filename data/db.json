@@ -23,7 +23,7 @@
     {
       "id": "b82fa698-8ec3-4fed-af99-798cdce165f4",
       "staffId": "S003",
-      "name": "Adam Jane",
+      "name": "Adam Jan",
       "joiningDate": "2024-05-01",
       "basicSalary": "3400",
       "allowances": "500",
@@ -31,12 +31,21 @@
       "salaryAllowances": "4830"
     },
     {
-      "id": "e352a91d-1ff1-471b-a960-4888e5a654d9",
+      "id": "d99c1336-a58b-4298-a136-8ea39ebf841c",
       "staffId": "S004",
-      "name": "Mariia Doe",
-      "joiningDate": "2024-02-01",
-      "basicSalary": "6500",
-      "allowances": "2400",
+      "name": "Ali Mardini",
+      "joiningDate": "2024-05-01",
+      "basicSalary": 10000,
+      "allowances": 10000,
+      "currancy": "$"
+    },
+    {
+      "id": "5925ed50-b460-48e1-af35-b8f7e3bbd8e5",
+      "staffId": "S005",
+      "name": "Ali Mardinii",
+      "joiningDate": "2024-05-01",
+      "basicSalary": 7500,
+      "allowances": 2500,
       "currancy": "$"
     }
   ],
@@ -65,7 +74,8 @@
         "year": "2024",
         "total": 5700,
         "isEndOfService": false
-      }
+      },
+      "id": "bb11"
     },
     {
       "0": {
@@ -186,6 +196,51 @@
         "isEndOfService": false
       },
       "id": "74a9"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 0,
+        "deductions": 0,
+        "month": "May",
+        "year": "2024",
+        "total": 3500,
+        "isEndOfService": false
+      },
+      "id": "b113"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 0,
+        "deductions": 0,
+        "month": "June",
+        "year": "2024",
+        "total": 3500,
+        "isEndOfService": false
+      },
+      "id": "b2e5"
+    },
+    {
+      "0": {
+        "id": "16a1249b-5849-4432-a8eb-0cd62bdb1e2d",
+        "name": "John Doe",
+        "basicSalary": 1500,
+        "allowances": 2000,
+        "additions": 1000,
+        "deductions": 0,
+        "month": "January",
+        "year": "2024",
+        "total": 4500,
+        "isEndOfService": false
+      },
+      "id": "7e3b"
     }
   ],
   "logs": [
@@ -205,6 +260,24 @@
       "id": "c6bec410-7674-480a-b72f-51495fb1b781",
       "date": "Fri May 10 2024, 12:29:25 AM",
       "message": "3 has been processed successfully!",
+      "level": "info"
+    },
+    {
+      "id": "a6377197-aeda-4137-8dde-eaae978282b0",
+      "date": "Mon May 20 2024, 11:15:21 AM",
+      "message": "1 has been processed successfully!",
+      "level": "info"
+    },
+    {
+      "id": "78e0e49f-f2ee-457f-8982-c7ef209b62b8",
+      "date": "Mon May 20 2024, 11:24:39 AM",
+      "message": "1 has been processed successfully!",
+      "level": "info"
+    },
+    {
+      "id": "568cf5cc-2c20-4ad5-88b9-028ac9f2e073",
+      "date": "Wed May 22 2024, 11:31:48 PM",
+      "message": "1 has been processed successfully!",
       "level": "info"
     }
   ]

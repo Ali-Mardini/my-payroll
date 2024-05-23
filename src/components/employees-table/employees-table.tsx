@@ -4,6 +4,8 @@ import { PencilIcon, PlusCircleIcon, TrashIcon } from "@heroicons/react/16/solid
 import { Employee } from "../../types/employee";
 import axios from "axios";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface EmployeesTableProps {
   data: Employee[];
@@ -25,10 +27,12 @@ const EmployeesTable = ({ data }: EmployeesTableProps) => {
         editedEmployee
       );
       if (response.status == 200) {
-        window.location.reload();
+		toast.success("Employee details saved successfully!", {
+			onClose: () => window.location.reload(),
+		});
       }
     } catch (error) {
-      console.error("Error fetching staffs:", error);
+		toast.error("Error saving employee details.");
     }
     setSelectedEmployee(null);
   };
@@ -37,10 +41,12 @@ const EmployeesTable = ({ data }: EmployeesTableProps) => {
     try {
       const response = await axios.delete(`http://localhost:3000/staffs/${id}`);
       if (response.status == 200) {
-        window.location.reload();
+		toast.success("Employee deleted successfully!", {
+			onClose: () => window.location.reload(),
+		});
       }
     } catch (error) {
-      console.error("Error fetching staffs:", error);
+		toast.error("Error deleting employee.");
     }
   };
 

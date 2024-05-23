@@ -4,6 +4,7 @@ import Layout from "../../layouts/layout";
 import { useEffect, useState } from "react";
 import { Employee } from "../../types/employee";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const Employees = () => {
   const [data, setData] = useState<Employee[]>([]);
@@ -14,7 +15,7 @@ const Employees = () => {
         const response = await axios.get("http://localhost:3000/staffs");
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching staffs:", error);
+		toast.error("Error gettings employees.");
       }
     };
 
@@ -27,7 +28,7 @@ const Employees = () => {
         const response = await axios.get(`http://localhost:3000/staffs?name=${value}`);
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching staffs:", error);
+		toast.error("Error gettings employees.");
       }
   }
 
@@ -39,7 +40,7 @@ const Employees = () => {
         <div className="flex items-center">
           <input
             type="text"
-			onKeyUp={(e) => search(e.target.value)}
+			onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => search((e.target as HTMLInputElement).value)}
             placeholder="Staff name..."
             className="py-2 px-4 text-black border border-gray-300 rounded-l-md focus:outline-none focus:border-blue-500 flex-grow"
           />

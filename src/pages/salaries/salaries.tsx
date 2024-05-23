@@ -7,17 +7,14 @@ import axios from "axios";
 import { Salary } from "../../types/salary";
 import { LogRecord } from "../../types/logRecord";
 import { v4 as uuidv4 } from "uuid";
+import * as Yup from "yup";
 
 const Salaries = () => {
   const [activeTab, setActiveTab] = useState("salaries");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [logs, setLogs] = useState<LogRecord[]>([]);
-  const [additionsMap, setAdditionsMap] = useState<{ [key: string]: string }>(
-    {}
-  );
-  const [deductionsMap, setDeductionsMap] = useState<{ [key: string]: string }>(
-    {}
-  );
+  const [additionsMap, setAdditionsMap] = useState<{ [key: string]: string }>({});
+  const [deductionsMap, setDeductionsMap] = useState<{ [key: string]: string }>({});
 
   const handleAdditionsChange = (event, employeeId: string) => {
     setAdditionsMap((prevMap) => ({
@@ -80,9 +77,7 @@ const Salaries = () => {
     let deductionsValue = 0;
     try {
       additionsValue = parseFloat(additionsMap[employee.id]?.toString() || "0");
-      deductionsValue = parseFloat(
-        deductionsMap[employee.id]?.toString() || "0"
-      );
+      deductionsValue = parseFloat(deductionsMap[employee.id]?.toString() || "0");
     } catch (error) {
       console.error("Error parsing addition or deduction value:", error);
     }
@@ -177,6 +172,19 @@ const Salaries = () => {
     await submitSalaries(processedSalaries);
   };
 
+  const validationSchema = Yup.object().shape({
+    additionsMap: Yup.object().shape({
+      [Yup.ref('employeeId')]: Yup.number()
+        .typeError('Must be a number')
+        .min(0, 'Must be at least 0'),
+    }),
+    deductionsMap: Yup.object().shape({
+      [Yup.ref('employeeId')]: Yup.number()
+        .typeError('Must be a number')
+        .min(0, 'Must be at least 0'),
+    }),
+  });
+
   return (
     <Layout>
       <div className="bg-gradient-to-r from-blue-500 to-purple-500 py-10 px-4 text-white">
@@ -206,7 +214,7 @@ const Salaries = () => {
             Logs
           </button>
         </div>
-        <div>
+        <div className="p-4">
           {activeTab === "salaries" && (
             <div>
               <div className="container mx-auto mt-8">
@@ -265,25 +273,30 @@ const Salaries = () => {
                         <td className="border border-gray-200 px-4 py-2">
                           <input
                             type="number"
-                            value={additionsMap[employee.id] || 0}
+                            value={additionsMap[employee.id] || ""}
                             onChange={(event) =>
                               handleAdditionsChange(event, employee.id)
                             }
+                            className="w-full p-1 border border-gray-300 rounded"
                           />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
                           <input
                             type="number"
-                            value={deductionsMap[employee.id] || 0}
+                            value={deductionsMap[employee.id] || ""}
                             onChange={(event) =>
                               handleDeductionsChange(event, employee.id)
                             }
+                            className="w-full p-1 border border-gray-300 rounded"
                           />
                         </td>
                         <td className="border border-gray-200 px-4 py-2">
-                          <select id={`month-${employee.id}`}>
-                            {months.map((month) => (
-                              <option key={month} value={month}>
+                          <select
+                            id={`month-${employee.id}`}
+                            className="w-full p-1 border border-gray-300 rounded"
+                          >
+                            {months.map((month, index) => (
+                              <option key={index} value={month}>
                                 {month}
                               </option>
                             ))}
@@ -292,7 +305,7 @@ const Salaries = () => {
                         <td className="border border-gray-200 px-4 py-2">
                           <select
                             id={`year-${employee.id}`}
-                            value={currentYear}
+                            className="w-full p-1 border border-gray-300 rounded"
                           >
                             {yearOptions.map((year) => (
                               <option key={year} value={year}>
@@ -304,11 +317,10 @@ const Salaries = () => {
                         <td className="border border-gray-200 px-4 py-2">
                           {calculateTotalSalary(employee)}
                         </td>
-                        <td className="border border-gray-200 px-4 py-2 flex items-center">
+                        <td className="border border-gray-200 px-4 py-2 text-center">
                           <input
-                            id={`end-of-service-${employee.id}`}
                             type="checkbox"
-                            className="mr-2"
+                            id={`end-of-service-${employee.id}`}
                           />
                         </td>
                       </tr>
@@ -319,42 +331,25 @@ const Salaries = () => {
             </div>
           )}
           {activeTab === "logs" && (
-            <div className="container mx-auto mt-8">
-              <h1 className="text-2xl font-bold mb-4">Logs Records</h1>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-200">
-                  <thead className="bg-gray-100">
-                    <tr>
-                      <th className="border border-gray-200 px-4 py-2">Date</th>
-                      <th className="border border-gray-200 px-4 py-2">
-                        Message
-                      </th>
-                      <th className="border border-gray-200 px-4 py-2">
-                        Level
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {logs.map((log) => (
-                      <tr key={log.id} className="hover:bg-gray-100">
-                        <td className="border border-gray-200 px-4 py-2">
-                          {log.date}
-                        </td>
-                        <td className="border border-gray-200 px-4 py-2">
-                          {log.message}
-                        </td>
-                        <td
-                          className={`border border-gray-200 px-4 py-2 ${getLevelColor(
-                            log.level
-                          )}`}
-                        >
-                          {log.level}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Logs</h1>
+              {logs.length === 0 ? (
+                <p>No logs found.</p>
+              ) : (
+                <ul>
+                  {logs.map((log) => (
+                    <li
+                      key={log.id}
+                      className={`border-b border-gray-200 py-2 ${getLevelColor(
+                        log.level
+                      )}`}
+                    >
+                      <p className="font-semibold">{log.message}</p>
+                      <p className="text-sm">{log.date}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
         </div>
@@ -364,7 +359,7 @@ const Salaries = () => {
 };
 
 const SalariesWithAuthentication = withAuthenticationRequired(Salaries, {
-  onRedirecting: () => <div>loading...</div>,
+  onRedirecting: () => <div>Loading...</div>,
 });
 
 export default SalariesWithAuthentication;
