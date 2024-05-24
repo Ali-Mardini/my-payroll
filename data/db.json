@@ -280,5 +280,24 @@
       "message": "1 has been processed successfully!",
       "level": "info"
     }
-  ]
+  ],
+  "upcomingPayments":[
+	{ "name": "John Doe", "date": "2024-06-01", "amount": "$1000" },
+	{ "name": "Jane Smith", "date": "2024-06-05", "amount": "$1500" }
+  ],
+  "currentPayments": [
+	{ "name": "Alice Johnson", "date": "2024-05-22", "amount": "$1200" },
+	{ "name": "Bob Brown", "date": "2024-05-23", "amount": "$1300" }
+  ],
+  "analytics":{
+	"labels": ["January", "February", "March", "April", "May"],
+	"datasets": [
+	  {
+		"label": "Payments",
+		"data": [1000, 1500, 1200, 1300, 1400],
+		"borderColor": "rgba(75,192,192,1)",
+		"backgroundColor": "rgba(75,192,192,0.2)"
+	  }
+	]
+  }
 }

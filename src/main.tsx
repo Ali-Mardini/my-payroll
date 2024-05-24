@@ -5,10 +5,15 @@ import "./index.css";
 import EmployeesWithAuthentication from "./pages/employees/employees";
 import SalariesWithAuthentication from "./pages/salaries/salaries";
 import { Auth0Provider } from "@auth0/auth0-react";
-import NewEmployeeWithAuthentication from './pages/employees/new-employees';
-import { ToastContainer } from 'react-toastify';
+import NewEmployeeWithAuthentication from "./pages/employees/new-employees";
+import { ToastContainer } from "react-toastify";
+import Dashboard from "./pages/dashboard/dashboard";
 
 const router = createBrowserRouter([
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
   {
     path: "/",
     element: <EmployeesWithAuthentication />,
@@ -25,7 +30,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-	<ToastContainer />
+    <ToastContainer />
     <Auth0Provider
       domain="payroll-app.us.auth0.com"
       clientId="j2ZtO8upYPg8hgdduBSnbagNMbwuWROi"
