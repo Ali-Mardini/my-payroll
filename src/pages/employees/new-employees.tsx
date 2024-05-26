@@ -9,11 +9,31 @@ import "react-toastify/dist/ReactToastify.css";
 import { Employee } from "../../types/employee";
 import { v4 as uuidv4 } from "uuid";
 import { subYears } from "date-fns";
+import Spinner from '../../components/spinner/spinner';
+import { useEffect, useState } from 'react';
 
 const NewEmployee = () => {
   const navigate = useNavigate();
   const today = new Date();
   const sixtyYearsAgo = subYears(today, 60);
+
+  const [lastStaffId, setLastStaffId] = useState('');
+
+  useEffect(() => {
+    const fetchLastStaffId = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/staffs');
+        const staffIds = response.data.map((staff: Employee) => staff.staffId);
+        const maxStaffId = staffIds[staffIds.length - 1]
+		console.log(maxStaffId);
+        setLastStaffId((maxStaffId).toString());
+      } catch (error) {
+        console.error('Error fetching next staff ID:', error);
+      }
+    };
+
+    fetchLastStaffId();
+  }, []);
 
   const checkDuplicateStaffId = async (staffId: string) => {
     try {
@@ -105,6 +125,7 @@ const NewEmployee = () => {
                   name="staffId"
                   className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                 />
+				<small>Last Staff ID is {lastStaffId}</small>
                 <ErrorMessage
                   name="staffId"
                   component="div"
@@ -203,7 +224,7 @@ const NewEmployee = () => {
 };
 
 const NewEmployeeWithAuthentication = withAuthenticationRequired(NewEmployee, {
-  onRedirecting: () => <div>Loading...</div>,
+	onRedirecting: () => <Spinner />,
 });
 
 export default NewEmployeeWithAuthentication;

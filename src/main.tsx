@@ -11,11 +11,11 @@ import Dashboard from "./pages/dashboard/dashboard";
 
 const router = createBrowserRouter([
   {
-    path: "/dashboard",
+    path: "/",
     element: <Dashboard />,
   },
   {
-    path: "/",
+    path: "/employees",
     element: <EmployeesWithAuthentication />,
   },
   {

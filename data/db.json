@@ -11,41 +11,12 @@
       "salaryAllowances": "200"
     },
     {
-      "id": "fc81a34a-2128-4427-80c5-7d9f19a41f37",
+      "id": "b63372e1-ccbf-4a16-a00e-592874bf9c42",
       "staffId": "S002",
-      "name": "Sam Joe",
-      "joiningDate": "2024-04-11",
-      "basicSalary": "4500",
-      "allowances": "1200",
-      "currancy": "$",
-      "salaryAllowances": "03"
-    },
-    {
-      "id": "b82fa698-8ec3-4fed-af99-798cdce165f4",
-      "staffId": "S003",
-      "name": "Adam Jan",
-      "joiningDate": "2024-05-01",
-      "basicSalary": "3400",
-      "allowances": "500",
-      "currancy": "$",
-      "salaryAllowances": "4830"
-    },
-    {
-      "id": "d99c1336-a58b-4298-a136-8ea39ebf841c",
-      "staffId": "S004",
       "name": "Ali Mardini",
       "joiningDate": "2024-05-01",
       "basicSalary": 10000,
-      "allowances": 10000,
-      "currancy": "$"
-    },
-    {
-      "id": "5925ed50-b460-48e1-af35-b8f7e3bbd8e5",
-      "staffId": "S005",
-      "name": "Ali Mardinii",
-      "joiningDate": "2024-05-01",
-      "basicSalary": 7500,
-      "allowances": 2500,
+      "allowances": 5400,
       "currancy": "$"
     }
   ],
@@ -281,23 +252,51 @@
       "level": "info"
     }
   ],
-  "upcomingPayments":[
-	{ "name": "John Doe", "date": "2024-06-01", "amount": "$1000" },
-	{ "name": "Jane Smith", "date": "2024-06-05", "amount": "$1500" }
+  "upcomingPayments": [
+    {
+      "name": "John Doe",
+      "date": "2024-06-01",
+      "amount": "$1000"
+    },
+    {
+      "name": "Jane Smith",
+      "date": "2024-06-05",
+      "amount": "$1500"
+    }
   ],
   "currentPayments": [
-	{ "name": "Alice Johnson", "date": "2024-05-22", "amount": "$1200" },
-	{ "name": "Bob Brown", "date": "2024-05-23", "amount": "$1300" }
+    {
+      "name": "Alice Johnson",
+      "date": "2024-05-22",
+      "amount": "$1200"
+    },
+    {
+      "name": "Bob Brown",
+      "date": "2024-05-23",
+      "amount": "$1300"
+    }
   ],
-  "analytics":{
-	"labels": ["January", "February", "March", "April", "May"],
-	"datasets": [
-	  {
-		"label": "Payments",
-		"data": [1000, 1500, 1200, 1300, 1400],
-		"borderColor": "rgba(75,192,192,1)",
-		"backgroundColor": "rgba(75,192,192,0.2)"
-	  }
-	]
+  "analytics": {
+    "labels": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May"
+    ],
+    "datasets": [
+      {
+        "label": "Payments",
+        "data": [
+          1000,
+          1500,
+          1200,
+          1300,
+          1400
+        ],
+        "borderColor": "rgba(75,192,192,1)",
+        "backgroundColor": "rgba(75,192,192,0.2)"
+      }
+    ]
   }
 }

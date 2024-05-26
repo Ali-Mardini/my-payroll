@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Employee } from "../../types/employee";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import Spinner from '../../components/spinner/spinner';
 
 const Employees = () => {
   const [data, setData] = useState<Employee[]>([]);
@@ -53,7 +54,7 @@ const Employees = () => {
 };
 
 const EmployeesWithAuthentication = withAuthenticationRequired(Employees, {
-  onRedirecting: () => <div>loading...</div>,
+  onRedirecting: () => <Spinner />,
 });
 
 export default EmployeesWithAuthentication;

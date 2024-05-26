@@ -9,6 +9,7 @@ import { LogRecord } from "../../types/logRecord";
 import { v4 as uuidv4 } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import Spinner from '../../components/spinner/spinner';
 
 const Salaries = () => {
   const [activeTab, setActiveTab] = useState("salaries");
@@ -357,7 +358,7 @@ const Salaries = () => {
 
 
 const SalarieseWithAuthentication = withAuthenticationRequired(Salaries, {
-	onRedirecting: () => <div>Loading...</div>,
+	onRedirecting: () => <Spinner />,
   });
   
 export default SalarieseWithAuthentication;
