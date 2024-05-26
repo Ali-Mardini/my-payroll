@@ -2,7 +2,6 @@ import { Employee } from "../../types/employee";
 import { subYears } from "date-fns";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import axios from "axios";
 
 interface EmployeeDetailsProps {
   employee: Employee;
@@ -18,36 +17,13 @@ const EmployeeDetails = ({
   const today = new Date();
   const sixtyYearsAgo = subYears(today, 60);
 
-  const checkDuplicateStaffId = async (staffId: string) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/staffs?staffId=${staffId}`
-      );
-      return response.data.length > 0;
-    } catch (error) {
-      console.error("Error checking staff ID:", error);
-      return false;
-    }
-  };
-
   const validationSchema = Yup.object({
     name: Yup.string()
       .matches(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces")
       .required("Name is required"),
     staffId: Yup.string()
       .matches(/^[a-zA-Z0-9]+$/, "No special characters allowed")
-      .required("Staff ID is required")
-      .test(
-        "checkDuplicateStaffId",
-        "Staff ID already exists",
-        async (value) => {
-          if (value) {
-            const isDuplicate = await checkDuplicateStaffId(value);
-            return !isDuplicate;
-          }
-          return true;
-        }
-      ),
+      .required("Staff ID is required"),
     joiningDate: Yup.date()
       .max(today, "Joining date cannot be in the future")
       .min(sixtyYearsAgo, "Joining date cannot be more than 60 years ago")

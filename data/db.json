@@ -15,8 +15,17 @@
       "staffId": "S002",
       "name": "Ali Mardini",
       "joiningDate": "2024-05-01",
-      "basicSalary": 10000,
+      "basicSalary": 10500,
       "allowances": 5400,
+      "currancy": "$"
+    },
+    {
+      "id": "6ca9daac-65e6-4a6d-947e-e74c744b7d9f",
+      "staffId": "S003",
+      "name": "Ali Mardini",
+      "joiningDate": "2024-04-04",
+      "basicSalary": 15000,
+      "allowances": 5000,
       "currancy": "$"
     }
   ],
@@ -212,6 +221,9 @@
         "isEndOfService": false
       },
       "id": "7e3b"
+    },
+    {
+      "id": "3d02"
     }
   ],
   "logs": [
@@ -250,53 +262,12 @@
       "date": "Wed May 22 2024, 11:31:48 PM",
       "message": "1 has been processed successfully!",
       "level": "info"
-    }
-  ],
-  "upcomingPayments": [
-    {
-      "name": "John Doe",
-      "date": "2024-06-01",
-      "amount": "$1000"
     },
     {
-      "name": "Jane Smith",
-      "date": "2024-06-05",
-      "amount": "$1500"
+      "id": "26acfb19-a1b9-4fc9-b846-a070d9d190b0",
+      "date": "Sun May 26 2024, 6:28:15 PM",
+      "message": "0 has been processed successfully!",
+      "level": "info"
     }
-  ],
-  "currentPayments": [
-    {
-      "name": "Alice Johnson",
-      "date": "2024-05-22",
-      "amount": "$1200"
-    },
-    {
-      "name": "Bob Brown",
-      "date": "2024-05-23",
-      "amount": "$1300"
-    }
-  ],
-  "analytics": {
-    "labels": [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May"
-    ],
-    "datasets": [
-      {
-        "label": "Payments",
-        "data": [
-          1000,
-          1500,
-          1200,
-          1300,
-          1400
-        ],
-        "borderColor": "rgba(75,192,192,1)",
-        "backgroundColor": "rgba(75,192,192,0.2)"
-      }
-    ]
-  }
+  ]
 }

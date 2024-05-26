@@ -2,7 +2,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import {
   ArrowLeftEndOnRectangleIcon,
   BanknotesIcon,
-  PresentationChartBarIcon,
   UsersIcon,
 } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
@@ -15,11 +14,6 @@ const Sidebar = () => {
       <ul className="flex flex-col grow h-full pt-5 ">
         <li className="px-4 py-2 mb-5 rounded-md hover:bg-gray-700">
           <Link className="flex" to="/">
-            <PresentationChartBarIcon className="w-6 h-6 mr-2" /> Dashboard
-          </Link>
-        </li>
-        <li className="px-4 py-2 mb-5 rounded-md hover:bg-gray-700">
-          <Link className="flex" to="/employees">
             <UsersIcon className="w-6 h-6 mr-2" /> Employees
           </Link>
         </li>

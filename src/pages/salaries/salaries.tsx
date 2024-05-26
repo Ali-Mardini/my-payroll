@@ -7,16 +7,21 @@ import axios from "axios";
 import { Salary } from "../../types/salary";
 import { LogRecord } from "../../types/logRecord";
 import { v4 as uuidv4 } from "uuid";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import Spinner from '../../components/spinner/spinner';
+import Spinner from "../../components/spinner/spinner";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Salaries = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("salaries");
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [logs, setLogs] = useState<LogRecord[]>([]);
-  const [additionsMap, setAdditionsMap] = useState<{ [key: string]: string }>({});
-  const [deductionsMap, setDeductionsMap] = useState<{ [key: string]: string }>({});
+  const [additionsMap, setAdditionsMap] = useState<{ [key: string]: string }>(
+    {}
+  );
+  const [deductionsMap, setDeductionsMap] = useState<{ [key: string]: string }>(
+    {}
+  );
 
   const handleAdditionsChange = (event, employeeId: string) => {
     setAdditionsMap((prevMap) => ({
@@ -79,7 +84,9 @@ const Salaries = () => {
     let deductionsValue = 0;
     try {
       additionsValue = parseFloat(additionsMap[employee.id]?.toString() || "0");
-      deductionsValue = parseFloat(deductionsMap[employee.id]?.toString() || "0");
+      deductionsValue = parseFloat(
+        deductionsMap[employee.id]?.toString() || "0"
+      );
     } catch (error) {
       console.error("Error parsing addition or deduction value:", error);
     }
@@ -113,7 +120,9 @@ const Salaries = () => {
       );
       if (response.status == 201) {
         await logTransactions(processedSalarie.length, true);
-        window.location.reload();
+        toast.success("Employee added successfully", {
+          onClose: () => navigate("/"),
+        });
       }
     } catch (error) {
       await logTransactions(processedSalarie.length, false);
@@ -143,11 +152,13 @@ const Salaries = () => {
     }
   };
 
-  const handleProcessSalaries = async (values) => {
+  const handleProcessSalaries = async () => {
     const processedSalaries: Salary[] = [];
 
     employees.forEach((employee) => {
-      const selectedMonth = values[`month-${employee.id}`];
+      const selectedMonth = document.getElementById(
+        `month-${employee.id}`
+      )?.value;
 
       // Only process records with a selected month
       if (selectedMonth) {
@@ -156,30 +167,21 @@ const Salaries = () => {
           name: employee.name,
           basicSalary: parseFloat(employee.basicSalary.toString()),
           allowances: parseFloat(employee.allowances.toString()),
-          additions: parseFloat(values[`additions-${employee.id}`] || "0"),
-          deductions: parseFloat(values[`deductions-${employee.id}`] || "0"),
+          additions: parseFloat(additionsMap[employee.id]?.toString() || "0"),
+          deductions: parseFloat(deductionsMap[employee.id]?.toString() || "0"),
           month: selectedMonth,
-          year: values[`year-${employee.id}`] || currentYear.toString(), // Get year value by employee ID or use currentYear
+          year:
+            document.getElementById(`year-${employee.id}`)?.value ||
+            currentYear.toString(), // Get year value by employee ID or use currentYear
           total: calculateTotalSalary(employee),
-          isEndOfService: values[`end-of-service-${employee.id}`] || false,
+          isEndOfService:
+            document.getElementById(`end-of-service-${employee.id}`)?.checked ||
+            false,
         });
       }
     });
     await submitSalaries(processedSalaries);
   };
-
-  const validationSchema = Yup.object().shape({
-    employees: Yup.array().of(
-      Yup.object().shape({
-        additions: Yup.number()
-          .typeError('Must be a number')
-          .min(0, 'Must be at least 0'),
-        deductions: Yup.number()
-          .typeError('Must be a number')
-          .min(0, 'Must be at least 0'),
-      })
-    )
-  });
 
   return (
     <Layout>
@@ -210,144 +212,163 @@ const Salaries = () => {
             Logs
           </button>
         </div>
-        <div className="p-4">
+        <div>
           {activeTab === "salaries" && (
-            <Formik
-              initialValues={{
-                employees: employees.reduce((acc, employee) => {
-                  acc[employee.id] = {
-                    additions: "",
-                    deductions: "",
-                    month: "",
-                    year: currentYear.toString(),
-                    endOfService: false,
-                  };
-                  return acc;
-                }, {}),
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleProcessSalaries}
-              enableReinitialize
-            >
-              {({ values, handleChange }) => (
-                <Form>
-                  <div className="container mx-auto mt-8">
-                    <div className="flex justify-between mb-3">
-                      <h1 className="text-2xl font-bold mb-4">Salary Table</h1>
-                      <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-full flex items-center"
-                      >
-                        <PaperAirplaneIcon className="h-4 w-4 mr-3" />
-                        Process salaries
-                      </button>
-                    </div>
-                    <table className="w-full border-collapse border border-gray-200">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="border border-gray-200 p-2 text-left">Name</th>
-                          <th className="border border-gray-200 p-2 text-left">Basic Salary</th>
-                          <th className="border border-gray-200 p-2 text-left">Allowances</th>
-                          <th className="border border-gray-200 p-2 text-left">Additions</th>
-                          <th className="border border-gray-200 p-2 text-left">Deductions</th>
-                          <th className="border border-gray-200 p-2 text-left">Month</th>
-                          <th className="border border-gray-200 p-2 text-left">Year</th>
-                          <th className="border border-gray-200 p-2 text-left">Total Salary</th>
-                          <th className="border border-gray-200 p-2 text-left">End of Service</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {employees.map((employee) => (
-                          <tr key={employee.id}>
-                            <td className="border border-gray-200 p-2">{employee.name}</td>
-                            <td className="border border-gray-200 p-2">{employee.basicSalary}</td>
-                            <td className="border border-gray-200 p-2">{employee.allowances}</td>
-                            <td className="border border-gray-200 p-2">
-                              <Field
-                                name={`employees[${employee.id}].additions`}
-                                type="text"
-                                className="border-2 border-gray-300 p-1 rounded-md w-full"
-                                onChange={handleChange}
-                              />
-                              <ErrorMessage name={`employees[${employee.id}].additions`} component="div" className="text-red-500 text-sm mt-1" />
-                            </td>
-                            <td className="border border-gray-200 p-2">
-                              <Field
-                                name={`employees[${employee.id}].deductions`}
-                                type="text"
-                                className="border-2 border-gray-300 p-1 rounded-md w-full"
-                                onChange={handleChange}
-                              />
-                              <ErrorMessage name={`employees[${employee.id}].deductions`} component="div" className="text-red-500 text-sm mt-1" />
-                            </td>
-                            <td className="border border-gray-200 p-2">
-                              <Field
-                                as="select"
-                                name={`employees[${employee.id}].month`}
-                                className="border-2 border-gray-300 p-1 rounded-md w-full"
-                                onChange={handleChange}
-                              >
-                                {months.map((month, index) => (
-                                  <option key={index} value={month}>{month}</option>
-                                ))}
-                              </Field>
-                            </td>
-                            <td className="border border-gray-200 p-2">
-                              <Field
-                                as="select"
-                                name={`employees[${employee.id}].year`}
-                                className="border-2 border-gray-300 p-1 rounded-md w-full"
-                                onChange={handleChange}
-                              >
-                                {yearOptions.map((year, index) => (
-                                  <option key={index} value={year}>{year}</option>
-                                ))}
-                              </Field>
-                            </td>
-                            <td className="border border-gray-200 p-2">
-                              {calculateTotalSalary(employee)}
-                            </td>
-                            <td className="border border-gray-200 p-2">
-                              <Field
-                                name={`employees[${employee.id}].endOfService`}
-                                type="checkbox"
-                                className="form-checkbox h-5 w-5 text-blue-600"
-                                onChange={handleChange}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </Form>
-              )}
-            </Formik>
+            <div>
+              <div className="container mx-auto mt-8">
+                <div className="flex justify-between mb-3">
+                  <h1 className="text-2xl font-bold mb-4">Salary Table</h1>
+                  <button
+                    onClick={handleProcessSalaries}
+                    className="bg-blue-500 hover:bg-blue-700 text-white py-1 px-4 rounded-full flex items-center"
+                  >
+                    <PaperAirplaneIcon className="h-4 w-4 mr-3" />
+                    Process salaries
+                  </button>
+                </div>
+                <table className="w-full border-collapse border border-gray-200">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Employee Name
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Basic Salary
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Allowances
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Additions
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Deductions
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Month
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">Year</th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Total
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        End of Service
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {employees.map((employee) => (
+                      <tr key={employee.id}>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.name}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.basicSalary}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {employee.allowances}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          <input
+                            className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+                            type="number"
+                            min={0}
+                            value={additionsMap[employee.id] || 0}
+                            onChange={(event) =>
+                              handleAdditionsChange(event, employee.id)
+                            }
+							aria-label={`Additions for ${employee.name}`}
+							/>
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          <input
+                            className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+                            type="number"
+                            min={0}
+                            value={deductionsMap[employee.id] || 0}
+                            onChange={(event) =>
+                              handleDeductionsChange(event, employee.id)
+                            }
+							aria-label={`Deductions for ${employee.name}`}
+                          />
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          <select className="block w-full px-4 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 sm:text-sm"
+						id={`month-${employee.id}`}>
+                            {months.map((month) => (
+                              <option key={month} value={month}>
+                                {month}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          <select
+						className="block w-full px-4 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 sm:text-sm"
+                            id={`year-${employee.id}`}
+                            value={currentYear}
+                          >
+                            {yearOptions.map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {calculateTotalSalary(employee)}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          <input
+                            type="checkbox"
+                            className="text-blue-500 h-5 w-5 "
+                            id={`end-of-service-${employee.id}`}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )}
-
           {activeTab === "logs" && (
             <div className="container mx-auto mt-8">
-              <h1 className="text-2xl font-bold mb-4">Logs</h1>
-              <table className="w-full border-collapse border border-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="border border-gray-200 p-2 text-left">Date</th>
-                    <th className="border border-gray-200 p-2 text-left">Message</th>
-                    <th className="border border-gray-200 p-2 text-left">Level</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map((log) => (
-                    <tr key={log.id}>
-                      <td className="border border-gray-200 p-2">{log.date}</td>
-                      <td className="border border-gray-200 p-2">{log.message}</td>
-                      <td className="border border-gray-200 p-2">
-                        <span className={getLevelColor(log.level)}>{log.level}</span>
-                      </td>
+              <h1 className="text-2xl font-bold mb-4">Logs Records</h1>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-200">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="border border-gray-200 px-4 py-2">Date</th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Message
+                      </th>
+                      <th className="border border-gray-200 px-4 py-2">
+                        Level
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {logs.map((log) => (
+                      <tr key={log.id} className="hover:bg-gray-100">
+                        <td className="border border-gray-200 px-4 py-2">
+                          {log.date}
+                        </td>
+                        <td className="border border-gray-200 px-4 py-2">
+                          {log.message}
+                        </td>
+                        <td
+                          className={`border border-gray-200 px-4 py-2 ${getLevelColor(
+                            log.level
+                          )}`}
+                        >
+                          {log.level}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
@@ -356,9 +377,8 @@ const Salaries = () => {
   );
 };
 
+const SalariesWithAuthentication = withAuthenticationRequired(Salaries, {
+  onRedirecting: () => <Spinner />,
+});
 
-const SalarieseWithAuthentication = withAuthenticationRequired(Salaries, {
-	onRedirecting: () => <Spinner />,
-  });
-  
-export default SalarieseWithAuthentication;
+export default SalariesWithAuthentication;
